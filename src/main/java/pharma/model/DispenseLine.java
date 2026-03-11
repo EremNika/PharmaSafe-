@@ -34,12 +34,14 @@ public class DispenseLine {
 
     public double getLineTotal() {
         // TODO: занятие 1 ДЗ-1 - вернуть сумму по позиции
-        return 0.0;
+    
+        return priceAtMoment * quantity;
     }
 
     @Override
     public String toString() {
         // TODO: занятие 1 ДЗ-1 - форматировать строку
-        return "DispenseLine{" + medication.getName() + ", qty=" + quantity + "}";
+        String res=String.format("DispenseLine{ %s , qty= %s }", medication.getName(), quantity);
+        return res;
     }
 }

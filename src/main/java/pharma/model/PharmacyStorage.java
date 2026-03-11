@@ -1,6 +1,10 @@
 package pharma.model;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class PharmacyStorage extends BaseEntity {
+    private static final Logger LOGGER = Logger.getLogger(PharmacyStorage.class.getName());
     private String name;
     private StorageType type;
     private TemperatureMode supportedMode;
@@ -27,17 +31,26 @@ public class PharmacyStorage extends BaseEntity {
     }
 
     public boolean canStore(Medication medication) {
+        
         // TODO: занятие 1 - проверить что supportedMode подходит для medication.getTemperatureMode()
         return false;
     }
 
     public void checkTemperature() {
         // TODO: занятие 1 - проверить currentTemperature в диапазоне [minTemp, maxTemp]
+        if(currentTemperature<minTemp || currentTemperature>maxTemp){
+            throw new IllegalArgumentException("Текущий уровень температуры не входит в необходимый диапазон");
+        }
+         
+
+
+
         // TODO: занятие 4 - бросить TemperatureViolationException при нарушении
     }
 
     public void setCurrentTemperature(double currentTemperature) {
         // TODO: занятие 1 - добавить валидацию и логирование
+        LOGGER.info(String.format("Температура сейчас - {}", currentTemperature));
         this.currentTemperature = currentTemperature;
     }
 
@@ -77,6 +90,8 @@ public class PharmacyStorage extends BaseEntity {
     @Override
     public String toString() {
         // TODO: занятие 1 - улучшить формат
-        return "PharmacyStorage[" + id + "] " + name + " (" + type + ")";
+        // return "PharmacyStorage[" + id + "] " + name + " (" + type + ")";
+        String res = String.format("PharmacyStorage [ %s ] %s ( %s )",id,name,type);
+        return res;
     }
 }

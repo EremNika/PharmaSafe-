@@ -53,7 +53,10 @@ public class Distributor extends BaseEntity {
     @Override
     public String toString() {
         // TODO: занятие 1 - сделать более читаемый формат
-        return "Distributor[" + id + "] " + companyName +
-                ", modes=" + Arrays.toString(suppliedModes);
+        // return "Distributor[" + id + "] " + companyName +
+        //         ", modes=" + Arrays.toString(suppliedModes);
+        String res=String.format("Distributor [ %s ] %s, modes= %s",id, companyName,Arrays.toString(suppliedModes));
+        return res;
     }
+
 }

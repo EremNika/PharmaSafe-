@@ -22,6 +22,10 @@ public class Medication extends BaseEntity {
                       TemperatureMode temperatureMode,
                       int shelfLifeDays) {
         super(id);
+        if (shelfLifeDays <= 0) {
+            throw new IllegalArgumentException("Срок годности должен быть положительным числом");
+        }
+        
         this.name = name;
         this.inn = inn;
         this.dosage = dosage;
@@ -67,14 +71,18 @@ public class Medication extends BaseEntity {
         return temperatureMode;
     }
 
-    public int getShelfLifeDays() {
-        return shelfLifeDays;
+    public int getShelfLifeDays() {         
+            return shelfLifeDays;        
     }
 
     @Override
     public String toString() {
         // TODO: занятие 1 - улучшить формат через String.format()
-        return "Medication[" + id + "] " + name + " " + dosage + " (" + form + ")";
+        // return "Medication[" + id + "] " + name + " " + dosage + " (" + form + ")";
+
+        String res= String.format("Medication [ %s ] %s %s ( %s )",id,name,dosage,form);
+       
+        return res;
     }
 }
 
