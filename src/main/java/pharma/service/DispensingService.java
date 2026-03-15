@@ -80,6 +80,12 @@ public class DispensingService {
 
     public PrescriptionOrder getOrderById(String orderId) {
         // TODO: занятие 2 - поиск в orders
+        for(PrescriptionOrder order : orders.values()){
+            if(order.getId().equals(orderId)){
+                return order;
+            }
+        }
+
         return null;
     }
 

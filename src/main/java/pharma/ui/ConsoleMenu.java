@@ -1,9 +1,18 @@
 package pharma.ui;
 
+import pharma.model.BaseEntity;
+import pharma.model.BatchRecord;
+import pharma.model.Medication;
+import pharma.model.PharmacyStorage;
+import pharma.model.StorageType;
+import pharma.model.TemperatureMode;
 import pharma.service.DispensingService;
 import pharma.service.ExpiryControlService;
 import pharma.service.InventoryService;
 
+import java.io.Console;
+import java.lang.runtime.TemplateRuntime;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class ConsoleMenu {
@@ -36,7 +45,122 @@ public class ConsoleMenu {
                     break;
                 case 3:
                     // TODO: занятие 2 ДЗ-2 - Принять партию
+                    System.out.println("\n Ввод информации о лекарстве");
+                    String nameMed = readString("Введите название лекарства: ");
+                    String innMed = readString("Введите ИНН: ");
+                    String dosageMed = readString("Введите дозировку: ");
+                    String formMed = readString("Введите лекарственную форму: ");
+                    
+                    boolean isPrescription = Boolean.getBoolean("Нужен ли рецепт? (true/false): ");
+                    boolean isNarcotic = Boolean.getBoolean("Относится ли к наркотическим? (true/false): ");
+                    boolean isPsychotropic = Boolean.getBoolean("Относится ли к психотропным? (true/false): ");
+                    
+                    System.out.println("Выберите температуру хранения:");
+                    System.out.println("1 - комнатная");
+                    System.out.println("2 - прохладная");
+                    System.out.println("3 - холодильник");
+                    System.out.println("4 - морозильная камера");
+                    System.out.println("5 - сверхнизкая (-50)");
+                    int temperatureChoice = readInt("Ваш выбор (номер): ");
+                    
+                    TemperatureMode temperatureMode;
+                    switch (temperatureChoice) {
+                        case 1:
+                            temperatureMode = TemperatureMode.ROOM_TEMP;
+                            break;
+                        case 2:
+                            temperatureMode = TemperatureMode.COOL;
+                            break;
+                        case 3:
+                            temperatureMode = TemperatureMode.REFRIGERATOR;
+                            break;
+                        case 4:
+                            temperatureMode = TemperatureMode.FROZEN;
+                            break;
+                        case 5:
+                            temperatureMode = TemperatureMode.MINUS_50;
+                            break;
+                        default:
+                            System.out.println("Неверный выбор, установлена комнатная температура");
+                            temperatureMode = TemperatureMode.ROOM_TEMP;
+                    }
+                    
+                    int shelfLifeDays = readInt("Введите срок хранения (в днях): ");
+                     
+                    String medicationId = "MED_" + System.currentTimeMillis();
+                    Medication medication = new Medication(
+                        medicationId, nameMed, innMed, dosageMed, formMed,
+                        isPrescription, isNarcotic, isPsychotropic, temperatureMode, shelfLifeDays
+                    );
+                     
+                    System.out.println("\n Ввод информации о складе");
+                    String storageId = "STR_" + System.currentTimeMillis();
+                    String storageName = readString("Введите название склада: ");                    
+                    System.out.println("Выберите тип хранилища:");
+                    System.out.println("1 - торговый зал");
+                    System.out.println("2 - холодильник");
+                    System.out.println("3 - морозильная камера");
+                    System.out.println("4 - сейф (безопасное хранение)");
+                    System.out.println("5 - складское помещение");
+                    int storageType = readInt("Ваш выбор: ");
+                    
+                    System.out.println("Выберите температуру в хранилище:");
+                    System.out.println("1 - комнатная");
+                    System.out.println("2 - прохладная");
+                    System.out.println("3 - холодильник");
+                    System.out.println("4 - морозильная камера");
+                    System.out.println("5 - сверхнизкая (-50)");
+                    int storageTempChoice = readInt("Ваш выбор: ");
+                    
+                    StorageType storageTypes;
+                    switch (storageType) {
+                        case 1: storageTypes = StorageType.TRADE_HALL; break;
+                        case 2: storageTypes = StorageType.REFRIGERATOR_UNIT; break;
+                        case 3: storageTypes = StorageType.FREEZER; break;
+                        case 4: storageTypes = StorageType.SAFE; break;
+                        case 5: storageTypes = StorageType.WAREHOUSE; break;
+                        default: storageTypes = StorageType.TRADE_HALL;
+                    }
+                    
+                    TemperatureMode storageTemperature;
+                    switch (storageTempChoice) {
+                        case 1: storageTemperature = TemperatureMode.ROOM_TEMP; break;
+                        case 2: storageTemperature = TemperatureMode.COOL; break;
+                        case 3: storageTemperature = TemperatureMode.REFRIGERATOR; break;
+                        case 4: storageTemperature = TemperatureMode.FROZEN; break;
+                        case 5: storageTemperature = TemperatureMode.MINUS_50; break;
+                        default: storageTemperature = TemperatureMode.ROOM_TEMP;
+                    }
+                    
+                    double minTemp = Double.parseDouble("Введите минимальную температуру (°C): ");
+                    double maxTemp = Double.parseDouble("Введите максимальную температуру (°C): ");
+                    int capacity = readInt("Введите вместимость (количество упаковок): ");
+                    
+                    PharmacyStorage pharmacyStorage = new PharmacyStorage(
+                        storageId, storageName, storageTypes, storageTemperature, 
+                        minTemp, maxTemp, capacity
+                    );
+                     
+                    System.out.println("\n Ввод информации о партии");
+                    String batchId = "BATCH_" + System.currentTimeMillis();
+                    int quantity = readInt("Введите количество упаковок в партии: ");
+     
+                    LocalDate manufactureDate = LocalDate.now();
+                    LocalDate expiryDate = manufactureDate.plusDays(shelfLifeDays);
+                    
+                    BatchRecord batchRecord = new BatchRecord(
+                        batchId, medication, storageId, storageName, quantity,
+                        manufactureDate, expiryDate, pharmacyStorage
+                    );
+         
+                    try {
+                        inventoryService.getBatchesByMedication(batchId);
+                        System.out.println(String.format("Партия %s успешно принята!",batchId));
+                    } catch (Exception e) {
+                        System.out.println("Ошибка при приеме партии: " + e.getMessage());
+                    }
                     break;
+                  
                 case 4:
                     // TODO: занятие 5 - Создать рецептурный заказ
                     break;
