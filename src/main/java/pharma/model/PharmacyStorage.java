@@ -33,15 +33,15 @@ public class PharmacyStorage extends BaseEntity {
     public boolean canStore(Medication medication) {
         
         // TODO: занятие 1 - проверить что supportedMode подходит для medication.getTemperatureMode()
-        return false;
+        
+        return this.supportedMode == medication.getTemperatureMode();
     }
 
     public void checkTemperature() {
         // TODO: занятие 1 - проверить currentTemperature в диапазоне [minTemp, maxTemp]
         if(currentTemperature<minTemp || currentTemperature>maxTemp){
             throw new IllegalArgumentException("Текущий уровень температуры не входит в необходимый диапазон");
-        }
-         
+        }        
 
 
 
@@ -56,7 +56,7 @@ public class PharmacyStorage extends BaseEntity {
 
     public boolean isTemperatureViolation() {
         // TODO: занятие 1 - вернуть true если текущая температура вне диапазона
-        return false;
+        return currentTemperature < minTemp || currentTemperature > maxTemp;
     }
 
     public String getName() {
