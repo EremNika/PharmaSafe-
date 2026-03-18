@@ -83,15 +83,8 @@ PharmaSafe — Система учёта лекарственных средст
 Теоретическая база: Принципы SOLID, модульность, unit-тестирование с JUnit 5.
 Практическое задание:
 1.	Структура пакетов:
-pharma/
-├── model/        # Сущности (Medication, Batch, Order)
-├── service/      # Бизнес-логика (Inventory, Dispensing, Expiry)
-├── coldchain/    # Температурный контроль
-├── validation/   # Валидаторы
-├── report/       # Отчёты
-├── logger/       # Логирование
-├── exception/    # Исключения
-└── ui/           # Консольный интерфейс
+<img width="730" height="216" alt="image" src="https://github.com/user-attachments/assets/e43e94ca-1a34-42bd-a60b-cc1fa0ae6973" />
+
 2.	JUnit 5 тесты:
 <img width="893" height="299" alt="image" src="https://github.com/user-attachments/assets/d9b0067a-fcfe-4f67-b777-89bf8cfe3345" />
 
