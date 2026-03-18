@@ -6,12 +6,8 @@ PharmaSafe — Система учёта лекарственных средст
 Практическое задание:
 Реализовать базовые сущности системы:
 
-Класс	Поля	Методы
-Medication (Лекарственный препарат)	id, name, inn (МНН), dosage, form, isPrescription, isNarcotic, isPsychotropic, temperatureMode, shelfLifeDays	Конструктор, геттеры, toString()
-TemperatureMode (enum)	ROOM_TEMP (+15...+25), COOL (+8...+15), REFRIGERATOR (+2...+8), FROZEN (-15...-25), MINUS_50 (-50...-30)	—
-PharmacyStorage (Помещение аптеки)	id, name, type, supportedMode, currentTemperature, minTemp, maxTemp, capacity	Конструктор, canStore(Medication), checkTemperature(), setCurrentTemperature(), isTemperatureViolation(), геттеры
-StorageType (enum)	TRADE_HALL, REFRIGERATOR_UNIT, FREEZER, SAFE, WAREHOUSE	—
-Distributor (Фармацевтический дистрибьютор)	id, companyName, licenseNumber, contact, email, hasColdChain, suppliedModes	Конструктор, геттеры, toString()
+<img width="859" height="610" alt="image" src="https://github.com/user-attachments/assets/cb31f717-2bed-4419-8abf-9bc4156c5e73" />
+
 Домашнее задание:
 Дополнить систему моделями для управления партиями и отпуском:
 1.	BatchRecord — партия препарата:
@@ -30,12 +26,8 @@ Distributor (Фармацевтический дистрибьютор)	id, comp
 Практическое задание:
 В сервисе InventoryService реализовать методы:
 
-Метод	Описание
-acceptBatch(Medication, String serialNumber, String batchNumber, int quantity, LocalDate expiryDate, PharmacyStorage storage)	Добавляет в Map<String, List<BatchRecord>> по препаратам, проверяет canStore
-getBatchesByMedication(String medicationId)	Все партии препарата
-getBatchesExpiringBefore(LocalDate date)	Фильтрация по expiryDate
-getTotalStock(String medicationId)	Сумма remaining по всем партиям
-findBatchBySerial(String serialNumber)	Поиск по серийному номеру
+<img width="867" height="369" alt="image" src="https://github.com/user-attachments/assets/c02e35dd-3a66-4ada-a1bf-c4b273064d64" />
+
 Домашнее задание:
 1.	Реализовать операции управления партиями:
 •	transferBatch(String batchId, String toStorageId) — проверка canStore в новом помещении
@@ -46,16 +38,8 @@ findBatchBySerial(String serialNumber)	Поиск по серийному ном
 Занятие 3: Объектно-ориентированное программирование
 Теоретическая база: Интерфейсы, абстрактные классы, полиморфизм, температурный контроль.
 Практическое задание:
+<img width="855" height="532" alt="image" src="https://github.com/user-attachments/assets/c1cf2d2a-4b66-4ab9-8fae-fe2ab1322ead" />
 
-Элемент	Описание
-Logger (interface)	void log(String message)
-ConsoleLogger	Реализация вывода в консоль
-AuditLogger	Реализация для контролируемых препаратов (журналирование в файл)
-TemperatureControlled (interface)	double getMinTemp(), getMaxTemp(), getCurrentTemp()
-RefrigeratedStorage implements TemperatureControlled	Холодильник (+2...+8)
-FrozenStorage implements TemperatureControlled	Морозильник (-15...-25)
-BasePrescription (abstract)	Базовый класс: number, date, status, pharmacist, геттеры, changeStatus()
-PrescriptionOrder extends BasePrescription	Наследует поля, добавляет checkerName для наркотических
 Домашнее задание:
 1.	Создать TemperatureMonitor — периодическая проверка isTemperatureViolation()
 2.	Реализовать ConsoleMenu с пунктами:
@@ -66,16 +50,8 @@ PrescriptionOrder extends BasePrescription	Наследует поля, доба
 Занятие 4: Исключения, перечисления, даты
 Теоретическая база: Обработка ошибок, бизнес-правила в enum, работа с LocalDate.
 Практическое задание:
+<img width="870" height="678" alt="image" src="https://github.com/user-attachments/assets/bb3404d2-4d96-4039-93ba-d207f37cf5b9" />
 
-Элемент	Описание
-PrescriptionStatus.canTransitionTo(PrescriptionStatus)	Правила: CREATED→VERIFIED→ASSEMBLED→CHECKED→ISSUED; REJECTED из любого статуса до ISSUED
-ExpiredMedicationException	extends Exception, хранит batchNumber, expiryDate, daysOverdue
-InvalidPrescriptionException	extends Exception — неверный номер, просрочен рецепт (>60 дней), нет подписи врача
-TemperatureViolationException	extends Exception, хранит current, min, max температуру
-PrescriptionValidator	validatePrescriptionData(String number, String doctor, LocalDate date) — проверка формата номера, дата не в будущем
-PrescriptionValidator	validatePrescriptionDate(LocalDate date) — рецепт действителен 60 дней
-ExpiryValidator	validateBatchExpiry(BatchRecord) — блокировка за 30 дней до срока
-TemperatureValidator	validateStorageConditions(Medication, PharmacyStorage) — проверка canStore
 Домашнее задание:
 1.	Двойная проверка: для isNarcotic или isPsychotropic требуется checkerName в статусе CHECKED
 2.	Интегрировать валидацию в DispensingService.verifyPrescription() — выброс InvalidPrescriptionException
@@ -86,10 +62,8 @@ TemperatureValidator	validateStorageConditions(Medication, PharmacyStorage) — 
 Практическое задание:
 Реализовать сервисы:
 
-Сервис	Методы
-InventoryService	acceptBatch() с проверкой температуры, writeOff(String batchId, int quantity, String reason) — списание (брак, просрочка), getStockReport(String medicationId) — остатки по партиям
-DispensingService	createPrescriptionOrder(String customerName, String prescriptionNumber, String doctorName, LocalDate prescriptionDate) — рецептурный, createOTCOrder(String customerName) — безрецептурный, addItemToOrder(String orderId, String medicationId, int quantity), verifyPrescription(String orderId, String pharmacistName), assembleOrder(String orderId) — резервирование партий (FEFO — сначала с истекающим сроком), pharmacistCheck(String orderId, String pharmacistName), assignChecker(String orderId, String checkerName), issueMedication(String orderId), rejectPrescription(String orderId, String reason)
-ExpiryControlService	getExpiringBatches(int days), blockNearExpiry(int daysBeforeExpiry), generateExpiryReport(Period), checkOpenedExpiry() — проверка срока после вскрытия
+<img width="859" height="538" alt="image" src="https://github.com/user-attachments/assets/c16aabe8-1d60-4136-97cf-790a45e3a614" />
+
 Домашнее задание:
 1.	FEFO при резервировании: сортировка партий по expiryDate (сначала те, что скоро истекают)
 2.	Автоматическая блокировка: метод autoBlockExpired() вызывается при старте системы
@@ -98,11 +72,8 @@ ExpiryControlService	getExpiringBatches(int days), blockNearExpiry(int daysBefor
 Занятие 6: Жизненный цикл отпуска
 Теоретическая база: Состояния объектов, переходы между состояниями, контроль качества.
 Практическое задание:
+<img width="875" height="318" alt="image" src="https://github.com/user-attachments/assets/b02f5137-fc67-4960-b5ee-678c3ed49c57" />
 
-Метод	Описание
-DispensingService.issueMedication(String orderId)	Проверка: все позиции собраны, CHECKED пройден, для наркотических — checkerName не null, списание с remaining
-DispensingService.rejectPrescription(String orderId, String reason)	Любой статус до ISSUED, освобождение резервов
-Проверки в changeStatus	Нельзя собрать (ASSEMBLED) без верификации рецепта для рецептурных
 Домашнее задание:
 1.	Поле pharmacistName обязательно для контролируемых препаратов
 2.	История проверок: List<String> verificationLog в PrescriptionOrder
@@ -122,11 +93,8 @@ pharma/
 ├── exception/    # Исключения
 └── ui/           # Консольный интерфейс
 2.	JUnit 5 тесты:
+<img width="893" height="299" alt="image" src="https://github.com/user-attachments/assets/d9b0067a-fcfe-4f67-b777-89bf8cfe3345" />
 
-Тестовый класс	Методы
-DispensingServiceTest	testPrescriptionRequiredForControlledDrug(), testDoubleCheckForNarcotics(), testCannotIssueWithoutVerification()
-ExpiryControlServiceTest	testAutoBlockExpired(), testFEFOReservation()
-InventoryServiceTest	testTemperatureCheckOnAccept()
 Домашнее задание:
 1.	Минимум 10 тестов: 4 на Dispensing, 3 на Expiry, 3 на Inventory
 2.	Проверить: блокировка просроченных, двойная проверка наркотических, FEFO работает корректно
@@ -134,33 +102,20 @@ InventoryServiceTest	testTemperatureCheckOnAccept()
 
 Занятие 8: Защита проекта
 Чек-лист готовности системы:
-•	[ ] CRUD операции для Medication, PharmacyStorage, Distributor
-•	[ ] Приёмка партий с проверкой температурного режима
-•	[ ] FEFO при отпуске (сначала с истекающим сроком)
-•	[ ] Блокировка за 30 дней до срока годности
-•	[ ] Рецептурный контроль: номер, дата, подпись врача
-•	[ ] Двойная проверка для наркотических и психотропных препаратов
-•	[ ] 3 отчёта: просроченные препараты, температурные нарушения, ПКУ (контролируемые препараты)
-•	[ ] 10+ unit-тестов
-•	[ ] README.md с инструкцией по запуску
+•[ ] CRUD операции для Medication, PharmacyStorage, Distributor
+•[ ] Приёмка партий с проверкой температурного режима
+•[ ] FEFO при отпуске (сначала с истекающим сроком)
+•[ ] Блокировка за 30 дней до срока годности
+•[ ] Рецептурный контроль: номер, дата, подпись врача
+•[ ] Двойная проверка для наркотических и психотропных препаратов
+•[ ] 3 отчёта: просроченные препараты, температурные нарушения, ПКУ (контролируемые препараты)
+•[ ] 10+ unit-тестов
+•[ ] README.md с инструкцией по запуску
 
 Итоговая спецификация системы PharmaSafe
 Архитектура
-┌─────────────────┐     ┌──────────────────────┐     ┌─────────────────┐
-│   ConsoleMenu   │────▶│  DispensingService   │────▶│  Inventory      │
-│     (UI)        │     │                      │     │    Service      │
-└─────────────────┘     └──────────────────────┘     └─────────────────┘
-         │                       │                            │
-         │                       ▼                            │
-         │              ┌──────────────────────┐              │
-         └─────────────▶│  ExpiryControlService│◀─────────────┘
-                        │                      │
-                        └──────────────────────┘
-                                 │
-                    ┌─────────────────────┐
-                    │   ColdChainService  │
-                    │  (TemperatureMonitor)│
-                    └─────────────────────┘
+<img width="500" height="304" alt="image" src="https://github.com/user-attachments/assets/6013cdd2-eefb-4993-b213-016930f22c0c" />
+
 Бизнес-правила системы
 1.	Блокировка просроченных — автоматическая блокировка партий за 30 дней до окончания срока годности
 2.	Срок после вскрытия — отдельное отслеживание для каждой партии с момента openPackage()
