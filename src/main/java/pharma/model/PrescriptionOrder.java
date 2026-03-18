@@ -35,10 +35,16 @@ public class PrescriptionOrder extends BaseEntity {
 
     public void addItem(DispenseLine line) {
         // TODO: занятие 1 ДЗ-1 - добавить позицию к заказу
+        items.add(line);
     }
 
     public boolean requiresPrescription() {
         // TODO: занятие 1 ДЗ-1 - проверить наличие контролируемых препаратов
+        for (DispenseLine line : items) {
+            if (line.getMedication().isPrescription()) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -113,6 +119,7 @@ public class PrescriptionOrder extends BaseEntity {
     @Override
     public String toString() {
         // TODO: занятие 1 ДЗ-1 - улучшить формат
-        return "PrescriptionOrder[" + id + "] " + customerName + " status=" + status;
+        String res =String.format("PrescriptionOrder[ %s ] %s status", id, customerName,status);
+        return res;
     }
 }

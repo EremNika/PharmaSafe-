@@ -1,8 +1,13 @@
 package pharma.model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.logging.Logger;
 
 public class BatchRecord extends BaseEntity {
+    private static final Logger LOGGER = Logger.getLogger(BatchRecord.class.getName());
+
     private Medication medication;
     private String serialNumber;
     private String batchNumber;
@@ -38,25 +43,37 @@ public class BatchRecord extends BaseEntity {
 
     public boolean isExpired() {
         // TODO: занятие 1 ДЗ-1 - проверить по expiryDate
+        if(expiryDate.isBefore(LocalDate.now())){
+            return true;
+        }
         return false;
     }
 
     public boolean isOpenedExpired() {
         // TODO: занятие 1 ДЗ-1 - проверить срок после вскрытия openedDate
+        long daysSinceOpened=ChronoUnit.DAYS.between(openedDate, LocalDate.now());
+
+        if(daysSinceOpened>medication.getShelfLifeDays()){
+            return true;
+        }
         return false;
     }
 
     public long getDaysUntilExpiry() {
         // TODO: занятие 1 ДЗ-1 - вернуть количество дней до срока годности
-        return 0L;
+        long quantity=ChronoUnit.DAYS.between(LocalDate.now(),expiryDate);
+        return quantity;
     }
 
     public void openPackage() {
         // TODO: занятие 1 ДЗ-1 - установить openedDate = today
+        openedDate=LocalDate.now();
     }
 
     public void block(String reason) {
         // TODO: занятие 1 ДЗ-1 - установить isBlocked = true, залогировать reason
+        isBlocked=true;
+        LOGGER.info("Блокировка");
     }
 
     public Medication getMedication() {
@@ -110,7 +127,9 @@ public class BatchRecord extends BaseEntity {
     @Override
     public String toString() {
         // TODO: занятие 1 ДЗ-1 - добавить больше информации
-        return "BatchRecord[" + id + "] " + medication.getName() +
-                " batch=" + batchNumber + ", remaining=" + remaining;
+        String res= String.format("BatchRecord[ %s ] %s batch= %s, remaining= %s, expiryDate= %s, openedDate= %s",id,medication.getName(),batchNumber,remaining,expiryDate,openedDate);
+        return res;
+        // return "BatchRecord[" + id + "] " + medication.getName() +
+        //         " batch=" + batchNumber + ", remaining=" + remaining;
     }
 }
