@@ -38,10 +38,109 @@ public class ConsoleMenu {
 
             switch (choice) {
                 case 1:
+                    
                     // TODO: занятие 3 ДЗ-3 - Добавить препарат
+                    System.out.println("\n Ввод информации о препарате");
+                    String nameMed1 = readString("Введите название лекарства: ");
+                    String innMed1 = readString("Введите ИНН: ");
+                    String dosageMed1 = readString("Введите дозировку: ");
+                    String formMed1 = readString("Введите лекарственную форму: ");
+                    
+                    System.out.print("Нужен ли рецепт? (true/false): ");
+                    boolean isPrescription1 = Boolean.parseBoolean(scanner.next());
+
+                    System.out.print("Относится ли к наркотическим? (true/false): ");
+                    boolean isNarcotic1 = Boolean.parseBoolean(scanner.next());
+
+                    System.out.print("Относится ли к психотропным? (true/false): ");
+                    boolean isPsychotropic1 = Boolean.parseBoolean(scanner.next());
+                                    
+                    System.out.println("Выберите тип хранилища:");
+                    System.out.println("1 - торговый зал");
+                    System.out.println("2 - холодильник");
+                    System.out.println("3 - морозильная камера");
+                    System.out.println("4 - безопасное хранение)");
+                    System.out.println("5 - складское помещение");
+                    int storageChoice = readInt("Ваш выбор: ");
+                    
+                    TemperatureMode temperatureMode1=TemperatureMode.ROOM_TEMP;;
+                    StorageType storageType1;
+                    switch (storageChoice) {
+                        case 1:
+                            storageType1=StorageType.TRADE_HALL;
+                            temperatureMode1=storageType1.getTemperatureMode();
+                            break;
+                        case 2:
+                            storageType1=StorageType.REFRIGERATOR_UNIT;
+                            temperatureMode1=storageType1.getTemperatureMode();
+                            break;
+                        case 3:
+                            storageType1=StorageType.FREEZER;
+                            temperatureMode1=storageType1.getTemperatureMode();
+                            break;
+                        case 4:
+                            storageType1=StorageType.SAFE;
+                            temperatureMode1=storageType1.getTemperatureMode();
+                            break;
+                        case 5:
+                            storageType1=StorageType.WAREHOUSE;
+                            temperatureMode1=storageType1.getTemperatureMode();
+                            break;                    
+                        default:
+                            break;
+                    }                       
+                    
+                    int shelfLifeDays1 = readInt("Введите срок хранения (в днях): ");
+                     
+                    String medicationId1 = "MED_" + System.currentTimeMillis();
+                    Medication medication1 = new Medication(
+                        medicationId1, nameMed1, innMed1, dosageMed1, formMed1,
+                        isPrescription1, isNarcotic1, isPsychotropic1, temperatureMode1, shelfLifeDays1
+                    );
+                     
+                    
                     break;
                 case 2:
                     // TODO: занятие 3 ДЗ-3 - Создать помещение
+
+                    System.out.println("\n Ввод информации о складе");
+                    String storageId2 = "STR_" + System.currentTimeMillis();
+                    String storageName2 = readString("Введите название склада: ");                    
+                    System.out.println("Выберите тип хранилища:");
+                    System.out.println("1 - торговый зал");
+                    System.out.println("2 - холодильник");
+                    System.out.println("3 - морозильная камера");
+                    System.out.println("4 - сейф (безопасное хранение)");
+                    System.out.println("5 - складское помещение");
+                    int storageType2 = readInt("Ваш выбор: ");
+                                     
+                    StorageType storageTypes2;
+                    TemperatureMode temperatureMode2=TemperatureMode.ROOM_TEMP;;
+                    switch (storageType2) {
+                        case 1: storageTypes2 = StorageType.TRADE_HALL;
+                                temperatureMode2=storageTypes2.getTemperatureMode();
+                                break;
+                        case 2: storageTypes2 = StorageType.REFRIGERATOR_UNIT;
+                                temperatureMode2=storageTypes2.getTemperatureMode();
+                                break;
+                        case 3: storageTypes2 = StorageType.FREEZER; 
+                                temperatureMode2=storageTypes2.getTemperatureMode();
+                                break;
+                        case 4: storageTypes2 = StorageType.SAFE; 
+                                temperatureMode2=storageTypes2.getTemperatureMode();
+                                break;
+                        case 5: storageTypes2 = StorageType.WAREHOUSE; 
+                                temperatureMode2=storageTypes2.getTemperatureMode();
+                                break;
+                        default: storageTypes2 = StorageType.TRADE_HALL;
+                    }
+                    int capacity2 = readInt("Введите вместимость (количество упаковок): ");
+                    
+                    PharmacyStorage pharmacyStorage1 = new PharmacyStorage(
+                        storageId2, storageName2, storageTypes2,temperatureMode2,
+                        temperatureMode2.getMinTemp(), temperatureMode2.getMaxTemp(), capacity2
+                    );                     
+                   
                     break;
                 case 3:
                     // TODO: занятие 2 ДЗ-2 - Принять партию
