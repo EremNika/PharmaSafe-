@@ -3,6 +3,8 @@ package pharma;
 import pharma.logger.ConsoleLogger;
 import pharma.logger.Logger;
 import pharma.model.Medication;
+import pharma.model.PharmacyStorage;
+import pharma.model.StorageType;
 import pharma.model.TemperatureMode;
 import pharma.service.DispensingService;
 import pharma.service.ExpiryControlService;
@@ -48,10 +50,15 @@ public class Main {
                     TemperatureMode.ROOM_TEMP,  
                     365    
                 );
-
+ 
+                PharmacyStorage pharmacyStorageModule =new PharmacyStorage("PS001","Модульная система", StorageType.TRADE_HALL, TemperatureMode.ROOM_TEMP, 17, 24, 100);
+                PharmacyStorage pharmacyStorageVertical =new PharmacyStorage("PS002","Вертикальная карусель", StorageType.TRADE_HALL, TemperatureMode.ROOM_TEMP, 17, 24, 200);
         
 
+
         ConsoleMenu menu = new ConsoleMenu(inventoryService, dispensingService, expiryControlService);
+        
         // TODO: занятие 3 - запуск основного меню
+        menu.start();
     }
 }
