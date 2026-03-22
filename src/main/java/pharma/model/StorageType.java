@@ -13,7 +13,7 @@ public enum StorageType {
         this.temperatureMode=temperatureMode;
     }
 
-    public TemperatureMode gTemperatureMode(){
+    public TemperatureMode getTemperatureMode(){
         return temperatureMode;
     }
     

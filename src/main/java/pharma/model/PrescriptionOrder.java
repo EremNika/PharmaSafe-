@@ -4,8 +4,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import pharma.logger.Logger;
 
 public class PrescriptionOrder extends BaseEntity {
+    private final Logger logger;
+    
     private PrescriptionStatus status;
     private LocalDateTime createdAt;
     private List<DispenseLine> items;
@@ -17,12 +22,14 @@ public class PrescriptionOrder extends BaseEntity {
     private String checkerName;
     private List<String> verificationLog; // ДЗ-6: история проверок
 
-    public PrescriptionOrder(String orderId,
+    public PrescriptionOrder(Logger logger,
+                            String orderId,
                              String customerName,
                              String prescriptionNumber,
                              String doctorName,
                              LocalDate prescriptionDate) {
         super(orderId);
+        this.logger=logger;
         this.status = PrescriptionStatus.CREATED;
         this.createdAt = LocalDateTime.now();
         this.items = new ArrayList<>();
@@ -50,16 +57,28 @@ public class PrescriptionOrder extends BaseEntity {
 
     public boolean requiresDoubleCheck() {
         // TODO: занятие 4 ДЗ-4 - isNarcotic || isPsychotropic
-        return false;
+        
+        return items.stream()
+        .map(DispenseLine::getMedication)
+        .anyMatch(med->med.isNarcotic() || med.isPsychotropic());
     }
 
     public boolean canChangeStatus(PrescriptionStatus newStatus) {
         // TODO: занятие 4 - делегировать в status.canTransitionTo(newStatus)
-        return false;
+        if(status==null || newStatus==null){
+            return false;
+        }
+        return status.canTransitionTo(newStatus);
     }
 
     public void changeStatus(PrescriptionStatus newStatus) {
         // TODO: занятие 4 - проверить canChangeStatus, обновить статус, залогировать
+        if(canChangeStatus(status)){
+            status=newStatus;
+            logger.log("Статус успешно обновлен!");
+        }
+        logger.log("Статус нельзя обновить!");
+
     }
 
     public void assignPharmacist(String pharmacistName) {
@@ -69,7 +88,14 @@ public class PrescriptionOrder extends BaseEntity {
 
     public void assignChecker(String checkerName) {
         // TODO: занятие 4 ДЗ-4 - двойная проверка для наркотических
+        if(requiresDoubleCheck()){
+            if(checkerName==null){
+                throw new IllegalArgumentException("Проверяющий должен быть назначен");
+            }
+            this.checkerName = checkerName;
+        }
         this.checkerName = checkerName;
+
     }
 
     public List<DispenseLine> getItems() {

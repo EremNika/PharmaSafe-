@@ -52,6 +52,8 @@ public class DispensingService {
     public void verifyPrescription(String orderId,
                                    String pharmacistName) throws InvalidPrescriptionException {
         // TODO: занятие 5 / 4 ДЗ-4 - интеграция PrescriptionValidator, смена статуса VERIFIED
+        prescriptionValidator.validatePrescriptionData(orderId, pharmacistName, null);
+        
     }
 
     public void assembleOrder(String orderId) {
