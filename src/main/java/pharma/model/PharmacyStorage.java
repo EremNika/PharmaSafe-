@@ -1,6 +1,9 @@
 package pharma.model;
 
 import java.util.logging.Logger;
+
+import pharma.exception.TemperatureViolationException;
+
 import java.util.logging.Level;
 
 public class PharmacyStorage extends BaseEntity {
@@ -37,20 +40,23 @@ public class PharmacyStorage extends BaseEntity {
         return this.supportedMode == medication.getTemperatureMode();
     }
 
-    public void checkTemperature() {
+    public void checkTemperature() throws TemperatureViolationException {
         // TODO: занятие 1 - проверить currentTemperature в диапазоне [minTemp, maxTemp]
         if(currentTemperature<minTemp || currentTemperature>maxTemp){
-            throw new IllegalArgumentException("Текущий уровень температуры не входит в необходимый диапазон");
-        }        
-
-
-
+            // throw new IllegalArgumentException("Текущий уровень температуры не входит в необходимый диапазон");
+            LOGGER.info(String.format(
+                "Нарушение! Текущая температура: %.1f°C, допустимо: [%.1f°C ... %.1f°C]",
+                currentTemperature, minTemp, maxTemp
+            ));
+             
+            throw new TemperatureViolationException(currentTemperature, minTemp, maxTemp);
+        }
         // TODO: занятие 4 - бросить TemperatureViolationException при нарушении
     }
 
     public void setCurrentTemperature(double currentTemperature) {
         // TODO: занятие 1 - добавить валидацию и логирование
-        LOGGER.info(String.format("Температура сейчас - {}", currentTemperature));
+        LOGGER.info(String.format("Температура сейчас - %.1f°C", currentTemperature));
         this.currentTemperature = currentTemperature;
     }
 
